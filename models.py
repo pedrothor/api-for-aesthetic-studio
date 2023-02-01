@@ -31,7 +31,7 @@ class Servicos(models.Model):
 
 
 class HorariosPadrao(models.Model):
-    horario = models.DateField()
+    horario = models.CharField(max_length=30)
 
     class Meta:
         db_table = 'horarios_padrao'
@@ -43,6 +43,7 @@ class HorariosPadrao(models.Model):
 
 
 class Agendamentos(models.Model):
+    required_css_class = 'required'  # mostra os campos obrigatórios
 
     #  cliente = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
     data = models.DateField(null=False, blank=False)

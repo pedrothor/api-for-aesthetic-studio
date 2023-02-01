@@ -1,14 +1,32 @@
+{% load bootstrap5 %}
 
-
-    <section id="sobre" class="corpo-site">
+    <section id="marcar_horario" class="corpo-site">
         <div>
             <hr class="linha-horizontal">
             <h3 class="titulos-corpo-site">Agende Seu Horário</h3>
-            <div class="corpo-sobre">
+            {% bootstrap_messages %}
+            <div class="corpo-sobre" style="margin-top: 80px;">
                 <form method="POST" action="">
-                    {{ form.as_p }}
-                    <br>
-                    <button type="submit" class="btn btn-success">Agendar Horário</button>
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-center" style="flex-direction: column;">
+
+                        <h4>Data</h4>
+                        {{ form.data }}
+                        <br>
+
+                        <h4>Serviço</h4>
+                        {{ form.servico }}
+                        <br>
+
+                        <h4>Horário</h4>
+                        {{ form.horario }}
+                        <br>
+
+                        <h4>Descrição</h4>
+                        {{ form.descricao }}
+                        <br>
+                        <button type="submit" class="btn btn-success">Agendar Horário</button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -5,10 +5,9 @@ from .forms import AgendamentoForm
 
 def index(request):
 
-    form = AgendamentoForm(request.POST)
+    form = AgendamentoForm()
     if str(request.method) == 'POST':
         if form.is_valid():
-
             form.save()
             form = AgendamentoForm()
             messages.success(request, 'Agendamento concluído!')

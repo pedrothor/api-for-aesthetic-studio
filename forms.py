@@ -1,15 +1,31 @@
 from .models import Agendamentos
 from django import forms
+import datetime
+
+
+class DateForm(forms.DateInput):
+    required_css_class = 'required'  # mostra os campos obrigatórios
+    input_type = 'date'
+
+    def __init__(self, *args, **kwargs):
+        hoje = datetime.datetime.now()
+        super().__init__(*args, **kwargs)
+        self.attrs.setdefault('min', datetime.date.today())  # restringindo agendamentos para datas passadas
+        self.attrs.setdefault('max', datetime.date(hoje.year, hoje.month+10, hoje.day+30))  # limitando a agendamento somente para 1 ano a frente
+
+    class Meta:
+        fields = ['data']
 
 
 class AgendamentoForm(forms.ModelForm):
+    required_css_class = 'required'  # mostra os campos obrigatórios
 
     class Meta:
         model = Agendamentos
         fields = ['data', 'servico', 'horario', 'descricao']
         widgets = {
-            'data': forms.Select(attrs={'class': 'form-control'}),
+            'data': DateForm(attrs={'class': 'form-control', }),
             'servico': forms.Select(attrs={'class': 'form-control', 'placeholder': '- Selecione -'}),
-            'horario': forms.TextInput(attrs={'class': 'form-control'}),
+            'horario': forms.Select(attrs={'class': 'form-control'}),
             'descricao': forms.Textarea(attrs={'class': 'form-control'}),
         }
