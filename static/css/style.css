@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Oleo+Script+Swash+Caps&display=swap');
+
+.titulo {
+    font-family: 'Oleo Script Swash Caps', cursive;
+    margin-top: 10px;
+}
+
+.titulo-header {
+    font-family: 'Oleo Script Swash Caps', cursive;
+    margin-top: 100px;
+}
+
+.titulo-header2 {
+    font-family: 'Oleo Script Swash Caps', cursive;
+}
+
+
+.linha-horizontal{
+    margin: 0 auto;
+    margin-top: 160px;
+    padding: 20px;
+    width: 600px;
+    color: #FFC0CB;
+    border-width: 2.5px;
+}
+
+.titulos-corpo-site {
+    font-family: 'Oleo Script Swash Caps', cursive;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    font-size: 70px;
+    color: #D0B084;
+}
+
+.corpo-site{
+    margin-left: 5%;
+    margin-right: 5%;
+    display: flex;
+    justify-content: center;
+}
+
+.corpo-sobre{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
