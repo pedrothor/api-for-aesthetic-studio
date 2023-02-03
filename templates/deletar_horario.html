@@ -1,0 +1,20 @@
+{% include 'base.html' %} <!-- o dropdown do botao 'minha conta' só funciona se estiver isso aqui -->
+{% load static %}
+
+{% block content %}
+
+<body class="d-flex justify-content-center">
+    <div class="column" style="margin-top: 10%; width: 100vh;">
+        <h1> Você tem certeza que quer deletar</h1><br><br><strong><h2>{{horario}} ?</h2></strong><br><br>
+
+        <form action="{% url 'deletar_horario' horario.id %}" method="POST">
+            {% csrf_token %}
+            <div class="d-flex justify-content-center">
+                <input class="btn btn-danger btn-lg" type="submit" value="Deletar" style="font-size: 15px;" >
+                <a class="btn btn-warning btn-lg" href="{% url 'lista_horarios' %}" style="margin-left: 20px;font-size: 15px;">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+{% endblock %}

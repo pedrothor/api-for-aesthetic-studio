@@ -4,9 +4,11 @@
         <div>
             <hr class="linha-horizontal">
             <h3 class="titulos-corpo-site">Agende Seu Horário</h3>
-            {% bootstrap_messages %}
             <div class="corpo-sobre" style="margin-top: 80px;">
-                <form method="POST" action="">
+                <div style="width: 320px;">
+                    {% bootstrap_messages %}
+                </div>
+                <form method="POST" action=".">
                     {% csrf_token %}
                     <div class="d-flex justify-content-center" style="flex-direction: column;">
 

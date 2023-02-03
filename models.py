@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Funcionario(models.Model):
@@ -45,11 +46,11 @@ class HorariosPadrao(models.Model):
 class Agendamentos(models.Model):
     required_css_class = 'required'  # mostra os campos obrigatórios
 
-    #  cliente = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
     data = models.DateField(null=False, blank=False)
     servico = models.ForeignKey(Servicos, null=False, blank=False, on_delete=models.CASCADE)
     horario = models.ForeignKey(HorariosPadrao, null=False, blank=False, on_delete=models.CASCADE)
-    descricao = models.TextField('Descrição', null=False, blank=False, max_length=150)
+    descricao = models.TextField('Descrição', null=True, blank=True, max_length=150)
     data_marcacao = models.DateField('Marcado em', auto_now=True)  # registra a data em que o horário foi marcado.
     atualizado = models.DateTimeField('Atualizado em', auto_now=True)  # registra a data em que o objeto foi atualizado.
 

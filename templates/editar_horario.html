@@ -1,0 +1,17 @@
+{% include 'base.html' %} <!-- o dropdown do botao 'minha conta' só funciona se estiver isso aqui -->
+{% load static %}
+{% block content %}
+
+
+<body class="d-flex justify-content-center align-items-center">
+    <div class="row" style="margin-top: 10%;">
+        <div class="colgroup-6" style="margin: 0 auto;" align="center">
+            <form action="" method="POST" class="formulario-editar">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input class="btn btn-success" type="submit" value="Confirmar" style="height: 30px; width: 110px; font-size: 15px; margin-left: 70%;">
+            </form>
+        </div>
+    </div>
+</body>
+{% endblock %}
