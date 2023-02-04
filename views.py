@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
-from .forms import AgendamentoForm, CreateUserForm, DateForm
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash  # serve para nao te desconectar ao trocar a senha
+from django.contrib.auth.forms import PasswordChangeForm
+from .forms import AgendamentoForm, CreateUserForm
 from .models import Agendamentos
 from django.contrib.auth.decorators import login_required
 
@@ -36,6 +37,7 @@ def lista_horarios(request):
 
     user = request.user
     horarios = Agendamentos.objects.filter(cliente=user).order_by('data', 'horario')
+
     context = {
         'horarios': horarios,
     }
@@ -48,7 +50,6 @@ def lista_horarios(request):
 def editar_horario(request, pk):
 
     horario = Agendamentos.objects.get(id=pk)
-
     form = AgendamentoForm(instance=horario)
     if str(request.method) == 'POST':
         form = AgendamentoForm(request.POST, instance=horario)
@@ -75,6 +76,30 @@ def deletar_horario(request, pk):
         'horario': horario
     }
     return render(request, 'deletar_horario.html', context)
+
+
+@login_required(login_url='login')
+def trocar_senha(request):
+
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, 'Senha alterada com sucesso!')
+            return redirect('index')
+        else:
+            form = PasswordChangeForm(user=request.user)
+            messages.error(request, 'Erro ao alterar senha')
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'change_password.html', context)
 
 
 def registerPage(request):
@@ -114,6 +139,7 @@ def loginPage(request):
     return render(request, 'login.html', context)
 
 
+@login_required(login_url='login')
 def logoutUser(request):
 
     logout(request)

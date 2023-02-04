@@ -8,8 +8,24 @@
         <div class="colgroup-6" style="margin: 0 auto;" align="center">
             <form action="" method="POST" class="formulario-editar">
                 {% csrf_token %}
-                {{ form.as_p }}
+                        <h4>Data</h4>
+                        {{ form.data }}
+                        <br>
+
+                        <h4>Serviço</h4>
+                        {{ form.servico }}
+                        <br>
+
+                        <h4>Horário</h4>
+                        {{ form.horario }}
+                        <br>
+
+                        <h4>Descrição</h4>
+                        {{ form.descricao }}
+                        <br>
                 <input class="btn btn-success" type="submit" value="Confirmar" style="height: 30px; width: 110px; font-size: 15px; margin-left: 70%;">
+                <br>
+                <br>
             </form>
         </div>
     </div>
