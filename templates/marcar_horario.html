@@ -3,31 +3,47 @@
     <section id="marcar_horario" class="corpo-site">
         <div>
             <hr class="linha-horizontal">
-            <h3 class="titulos-corpo-site">Agende Seu Horário</h3>
-            <div class="corpo-sobre" style="margin-top: 80px;">
+            <h3 class="titulos-corpo-site">Agendamentos</h3>
+            <div class="corpo-sobre" style="margin-top: 30px;">
                 <div style="width: 320px;">
                     {% bootstrap_messages %}
                 </div>
-                <form method="POST" action=".">
+                <form method="GET">
+                    <h4 class="d-flex justify-content-center">Data</h4>
+                    {{ form.data }}
+                    <br>
+
+                    <h4 class="d-flex justify-content-center">Serviço</h4>
+                    {{ form.servico }}
+                    <br>
+                    <div class="d-flex justify-content-center">
+                        <input type="submit" class="btn btn-primary" value="Verificar horários">
+                    </div>
+                    <br>
+                </form>
+
+                <form method="POST">
                     {% csrf_token %}
-                    <div class="d-flex justify-content-center" style="flex-direction: column;">
+                    <input type="hidden" name="data" value="{{ request.session.data }}">
+                    <input type="hidden" name="servico" value="{{ request.session.servico }}">
+                    <h4 class="d-flex justify-content-center">Horário</h4>
+                    <div class="d-flex justify-content-center">
+                        <select class="form-control" style="text-align: center; width: 190px;">
+                            {% for horario in horarios_disponiveis %}
 
-                        <h4>Data</h4>
-                        {{ form.data }}
-                        <br>
+                            <option value="{{ horario }}">{{ horario }}</option>
 
-                        <h4>Serviço</h4>
-                        {{ form.servico }}
-                        <br>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <br>
 
-                        <h4>Horário</h4>
-                        {{ form.horario }}
-                        <br>
+                    <h4 class="d-flex justify-content-center">Descrição</h4>
+                    {{ form.descricao }}
+                    <br>
 
-                        <h4>Descrição</h4>
-                        {{ form.descricao }}
-                        <br>
-                        <button type="submit" class="btn btn-success">Agendar Horário</button>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-success">Fazer Agendamento</button>
                     </div>
                 </form>
             </div>

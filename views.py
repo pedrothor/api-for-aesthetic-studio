@@ -2,34 +2,91 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash  # serve para nao te desconectar ao trocar a senha
 from django.contrib.auth.forms import PasswordChangeForm
-from .forms import AgendamentoForm, CreateUserForm
-from .models import Agendamentos
+from .forms import AgendamentoForm, CreateUserForm, EditaUsuarioForm
+from .models import Agendamentos, HorariosPadrao, Servicos
 from django.contrib.auth.decorators import login_required
 
 
 def index(request):
+
+    global horarios_disponiveis
+
     if request.user.is_authenticated:
 
-        form = AgendamentoForm(request.POST)
-        if str(request.method) == 'POST':
-            form.instance.cliente = request.user  # pegando a instância com 'form.instance'
-            if form.is_valid():
-                form.save()
-                form = AgendamentoForm()
-                messages.success(request, 'Agendamento concluído!')
+        if request.method == 'GET':
 
+            data = request.GET.get('data')
+            request.session['data'] = data  # empacotando na session
+
+            servico = request.GET.get('servico')
+            request.session['servico'] = servico  # empacotando na session
+
+            agendamentos = Agendamentos.objects.filter(data=data, servico=servico)
+            horarios_ocupados = [agendamento.horario for agendamento in agendamentos]
+            horarios_filtrados = HorariosPadrao.objects.all().exclude(horario__in=horarios_ocupados)
+
+            request.session['horarios_filtrados'] = [h.horario for h in horarios_filtrados]  # assim pois o session nao armazena queryset
+
+        form = AgendamentoForm(request.GET)
+
+        horarios_disponiveis = request.session.get('horarios_filtrados')
+        form.horario = horarios_disponiveis
+
+        if request.method == 'POST':
+
+            form = AgendamentoForm(request.POST)
+
+            if form.is_valid():
+                data = form.cleaned_data.get('data')
+                servico = form.cleaned_data.get('servico')
+                horario = form.cleaned_data.get('horario')
+                descricao = form.cleaned_data.get('descricao')
+                agendamento = Agendamentos.objects.create(
+                    data=data,
+                    servico=servico,
+                    horario=horario,
+                    descricao=descricao,
+                    cliente=request.user
+                )
+                messages.success(request, 'Agendamento concluído!')
+                return redirect('index')
             else:
                 form = AgendamentoForm()
-                messages.error(request, form.errors)
+                messages.error(request, 'Formulário inválido, por favor verifique as informações preenchidas')
     else:
         form = AgendamentoForm()
         messages.error(request, 'Faça login para agendar horário!')
 
     context = {
         'form': form,
+        'horarios_disponiveis': horarios_disponiveis,
     }
 
     return render(request, 'index.html', context)
+
+
+@login_required(login_url='login')
+def perfil_usuario(request):
+
+    if request.method == 'POST':
+
+        form = EditaUsuarioForm(request.POST, instance=request.user)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Informações atualizadas com sucesso!')
+            print('SUCESSO!')
+            return redirect(to='perfil_usuario')
+        else:
+            messages.error(request, 'Erro ao atualizar informações')
+    else:
+        form = EditaUsuarioForm(instance=request.user)
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'perfil_usuario.html', context)
 
 
 @login_required(login_url='login')
@@ -145,4 +202,3 @@ def logoutUser(request):
     logout(request)
 
     return redirect('index')
-
