@@ -1,51 +1,91 @@
+{% load static %}
 {% load bootstrap5 %}
 
-    <section id="marcar_horario" class="corpo-site">
-        <div>
-            <hr class="linha-horizontal">
-            <h3 class="titulos-corpo-site">Agendamentos</h3>
-            <div class="corpo-sobre" style="margin-top: 30px;">
-                <div style="width: 320px;">
-                    {% bootstrap_messages %}
-                </div>
-                <form method="GET">
-                    <h4 class="d-flex justify-content-center">Data</h4>
-                    {{ form.data }}
-                    <br>
-
-                    <h4 class="d-flex justify-content-center">Serviço</h4>
-                    {{ form.servico }}
-                    <br>
-                    <div class="d-flex justify-content-center">
-                        <input type="submit" class="btn btn-primary" value="Verificar horários">
-                    </div>
-                    <br>
-                </form>
-
-                <form method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="data" value="{{ request.session.data }}">
-                    <input type="hidden" name="servico" value="{{ request.session.servico }}">
-                    <h4 class="d-flex justify-content-center">Horário</h4>
-                    <div class="d-flex justify-content-center">
-                        <select class="form-control" style="text-align: center; width: 190px;">
-                            {% for horario in horarios_disponiveis %}
-
-                            <option value="{{ horario }}">{{ horario }}</option>
-
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <br>
-
-                    <h4 class="d-flex justify-content-center">Descrição</h4>
-                    {{ form.descricao }}
-                    <br>
-
-                    <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-success">Fazer Agendamento</button>
-                    </div>
-                </form>
-            </div>
+    <!-- Start Agendamento -->
+    <section id="agendamento" class="light-bg p-top-80 p-bottom-80" style="background-color: white;">
+        <!-- Section Title -->
+        <div class="section-title text-center m-bottom-40">
+            <h2>Agendamento</h2>
+            <div class="divider-center-small"></div>
         </div>
+        <div style="width: 320px;">
+            {% bootstrap_messages %}
+        </div>
+        <div id="booking" class="section">
+            <div class="section-center">
+                <div class="container">
+                    <div class="row" style="display:flex; justify-content: center;">
+                        <div class="booking-form" style="display: flex; flex-direction: column">
+
+                            <form action="" method="GET" style="display: flex; flex-direction: column">
+
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        {{form.data}}
+                                        <span class="form-label">Data</span>
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        {{ form.servico }}
+                                        <span class="select-arrow"></span>
+                                        <span class="form-label">Serviço</span>
+                                    </div>
+                                </div>
+
+                                <br>
+                                <div class="col-md-4">
+                                    <div class="form-btn">
+                                        <button class="btn btn-primary">Verificar Horários</button>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                            <br><br>
+
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="data" value="{{ request.session.data }}">
+                                <input type="hidden" name="servico" value="{{ request.session.servico }}">
+                                <div class="form-group">
+                                    <div class="col-md-2">
+                                        <select name="horario" class="form-control" style="text-align: center; width: 200px;">
+                                            {% for horario in request.session.horarios_filtrados %}
+
+                                            <option value="{{ horario }}">{{ horario }}</option>
+
+                                            {% endfor %}
+                                        </select>
+                                    <span class="form-label">Horário</span>
+                                        <br><br><br>
+                                    </div>
+                                </div>
+                                <br>
+
+                                <br>
+                                <div class="form-group" style="height: 200px; width: 400px;">
+                                    {{ form.descricao }}
+                                    <span class="select-arrow"></span>
+                                    <span class="form-label">Descrição</span>
+                                </div>
+                                <br>
+
+                                <div class="d-flex justify-content-center">
+                                    <br><br><br>
+                                    <button type="submit" class="btn btn-success">Concluir Agendamento</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+	    </div>
     </section>
+    <!-- End Agendamento -->
+
+
+
