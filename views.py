@@ -9,8 +9,6 @@ from django.contrib.auth.decorators import login_required
 
 def index(request):
 
-    global horarios_disponiveis
-
     if request.user.is_authenticated:
 
         if request.method == 'GET':
@@ -29,25 +27,17 @@ def index(request):
 
         form = AgendamentoForm(request.GET)
 
-        horarios_disponiveis = request.session.get('horarios_filtrados')
-        form.horario = horarios_disponiveis
-
         if request.method == 'POST':
-
             form = AgendamentoForm(request.POST)
+            horario_escolhido = HorariosPadrao.objects.filter(horario=request.POST.get('horario'))
 
             if form.is_valid():
-                data = form.cleaned_data.get('data')
-                servico = form.cleaned_data.get('servico')
-                horario = form.cleaned_data.get('horario')
-                descricao = form.cleaned_data.get('descricao')
-                agendamento = Agendamentos.objects.create(
-                    data=data,
-                    servico=servico,
-                    horario=horario,
-                    descricao=descricao,
-                    cliente=request.user
-                )
+                form.instance.cliente = request.user
+                form.data = form.cleaned_data.get('data')
+                form.servico = form.cleaned_data.get('servico')
+                form.horario = horario_escolhido
+                form.descricao = form.cleaned_data.get('descricao')
+                form.save()
                 messages.success(request, 'Agendamento concluído!')
                 return redirect('index')
             else:
@@ -59,7 +49,6 @@ def index(request):
 
     context = {
         'form': form,
-        'horarios_disponiveis': horarios_disponiveis,
     }
 
     return render(request, 'index.html', context)
@@ -180,20 +169,15 @@ def registerPage(request):
 def loginPage(request):
 
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
+        username = request.POST['username']
+        password = request.POST['pass']
         user = authenticate(request, username=username, password=password)
-
         if user is not None:
             login(request, user)
             return redirect('index')
         else:
-            messages.info(request, 'Usuário ou senha incorreta.')
-
-    context = {}
-
-    return render(request, 'login.html', context)
+            messages.error(request, 'Usuário ou senha inválidos')
+    return render(request, 'login.html')
 
 
 @login_required(login_url='login')
