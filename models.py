@@ -49,7 +49,7 @@ class Agendamentos(models.Model):
     cliente = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
     data = models.DateField(null=False, blank=False)
     servico = models.ForeignKey(Servicos, null=False, blank=False, on_delete=models.CASCADE)
-    horario = models.ForeignKey(HorariosPadrao, null=False, blank=False, on_delete=models.CASCADE)
+    horario = models.CharField(max_length=10, null=False, blank=False)
     descricao = models.TextField('Descrição', null=True, blank=True, max_length=150)
     data_marcacao = models.DateField('Marcado em', auto_now=True)  # registra a data em que o horário foi marcado.
     atualizado = models.DateTimeField('Atualizado em', auto_now=True)  # registra a data em que o objeto foi atualizado.
