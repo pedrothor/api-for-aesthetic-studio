@@ -2,6 +2,62 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Podologia(models.Model):
+
+    nome = models.CharField(max_length=50, null=False, blank=False)
+    preco = models.CharField(max_length=4, null=False, blank=False)
+
+    class Meta:
+        db_table = 'podologia'
+        verbose_name = 'servico_podologia'
+        verbose_name_plural = 'servicos_podologia'
+
+    def __str__(self):
+        return self.nome
+
+
+class ManicurePedicure(models.Model):
+
+    nome = models.CharField(max_length=50, null=False, blank=False)
+    preco = models.CharField(max_length=4, null=False, blank=False)
+
+    class Meta:
+        db_table = 'manicurePedicure'
+        verbose_name = 'servico_manicurepedicure'
+        verbose_name_plural = 'servicos_manicurepedicure'
+
+    def __str__(self):
+        return self.nome
+
+
+class Depilacao(models.Model):
+
+    nome = models.CharField(max_length=50, null=False, blank=False)
+    preco = models.CharField(max_length=4, null=False, blank=False)
+
+    class Meta:
+        db_table = 'depilacao'
+        verbose_name = 'servico_depilacao'
+        verbose_name_plural = 'servicos_depilacao'
+
+    def __str__(self):
+        return self.nome
+
+
+class Cilios(models.Model):
+
+    nome = models.CharField(max_length=50, null=False, blank=False)
+    preco = models.CharField(max_length=4, null=False, blank=False)
+
+    class Meta:
+        db_table = 'cilios'
+        verbose_name = 'servico_cilios'
+        verbose_name_plural = 'servicos_cilios'
+
+    def __str__(self):
+        return self.nome
+
+
 class Funcionario(models.Model):
 
     nome = models.CharField(max_length=100, null=False, blank=False)
@@ -18,7 +74,7 @@ class Funcionario(models.Model):
         return f'{self.nome} {self.sobrenome}'.title()
 
 
-class Servicos(models.Model):
+class Servico(models.Model):
 
     nome = models.CharField(max_length=50, null=False, blank=False)
 
@@ -31,7 +87,7 @@ class Servicos(models.Model):
         return f'{self.nome}'.title()
 
 
-class HorariosPadrao(models.Model):
+class HorarioPadrao(models.Model):
     horario = models.CharField(max_length=30)
 
     class Meta:
@@ -43,14 +99,15 @@ class HorariosPadrao(models.Model):
         return self.horario
 
 
-class Agendamentos(models.Model):
+class Agendamento(models.Model):
     required_css_class = 'required'  # mostra os campos obrigatórios
 
     cliente = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
     data = models.DateField(null=False, blank=False)
-    servico = models.ForeignKey(Servicos, null=False, blank=False, on_delete=models.CASCADE)
+    servico = models.ForeignKey(Servico, null=False, blank=False, on_delete=models.CASCADE)
     horario = models.CharField(max_length=10, null=False, blank=False)
-    descricao = models.TextField('Descrição', null=True, blank=True, max_length=150)
+    # imagem = models.FileField(upload_to='staticfiles/', null=True, blank=True)  # deixando off por enquanto
+    descricao = models.TextField('Descrição', null=False, blank=False, max_length=150)
     data_marcacao = models.DateField('Marcado em', auto_now=True)  # registra a data em que o horário foi marcado.
     atualizado = models.DateTimeField('Atualizado em', auto_now=True)  # registra a data em que o objeto foi atualizado.
 
