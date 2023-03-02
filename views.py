@@ -1,41 +1,64 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash  # serve para nao te desconectar ao trocar a senha
 from django.contrib.auth.forms import PasswordChangeForm
 from .forms import AgendamentoForm, CreateUserForm, EditaUsuarioForm
-from .models import Agendamentos, HorariosPadrao, Servicos
+from .models import Agendamento, HorarioPadrao, Podologia, ManicurePedicure, Depilacao, Cilios
 from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-
+    podologia = Podologia.objects.all()
+    manicurepedicure = ManicurePedicure.objects.all()
+    depilacao = Depilacao.objects.all()
+    cilios = Cilios.objects.all()
     if request.user.is_authenticated:
 
         if request.method == 'GET':
-
             data = request.GET.get('data')
-            request.session['data'] = data  # empacotando na session
+
+            # empacotando na session para utilizar no POST form
+            request.session['data'] = data
 
             servico = request.GET.get('servico')
-            request.session['servico'] = servico  # empacotando na session
 
-            agendamentos = Agendamentos.objects.filter(data=data, servico=servico)
+            # empacotando na session para utilizar no POST form
+            request.session['servico'] = servico
+
+            # pegando todos os agendamentos com a data e serviço passados no GET form
+            agendamentos = Agendamento.objects.filter(data=data, servico=servico)
+
+            # empacotando os hoários dos agendamentos filtrados acima.
             horarios_ocupados = [agendamento.horario for agendamento in agendamentos]
-            horarios_filtrados = HorariosPadrao.objects.all().exclude(horario__in=horarios_ocupados)
 
-            request.session['horarios_filtrados'] = [h.horario for h in horarios_filtrados]  # assim pois o session nao armazena queryset
+            # excluindo os horários ocupados dos horários padrões do dia a dia
+            horarios_filtrados = HorarioPadrao.objects.all().exclude(horario__in=horarios_ocupados)
 
+            # criando uma session 'horarios_filtrados'
+            request.session['horarios_filtrados'] = []
+
+            # pegando o valor inteiro da presente hora
+            hora_agora = int(datetime.now().hour)
+
+            # pegando a data de hoje e já a transformando em string
+            hoje = datetime.now().strftime('%Y-%m-%d')
+
+            # adicionando horarios a session 'horarios_filtrados' evitando que horas passadas sejam adicionadas
+            request.session['horarios_filtrados'] = [h.horario for h in horarios_filtrados if (data == hoje and int(h.horario.split(':')[0]) > hora_agora) or data != hoje]
+
+        # retornando o formulário com a data e serviço passado.
         form = AgendamentoForm(request.GET)
 
         if request.method == 'POST':
             form = AgendamentoForm(request.POST)
-            horario_escolhido = HorariosPadrao.objects.filter(horario=request.POST.get('horario'))
+            horario_selecionado = HorarioPadrao.objects.filter(horario=request.POST.get('horario'))
 
             if form.is_valid():
                 form.instance.cliente = request.user
                 form.data = form.cleaned_data.get('data')
                 form.servico = form.cleaned_data.get('servico')
-                form.horario = horario_escolhido
+                form.horario = horario_selecionado
                 form.descricao = form.cleaned_data.get('descricao')
                 form.save()
                 messages.success(request, 'Agendamento concluído!')
@@ -49,6 +72,10 @@ def index(request):
 
     context = {
         'form': form,
+        'podologia': podologia,
+        'manicurepedicure': manicurepedicure,
+        'depilacao': depilacao,
+        'cilios': cilios,
     }
 
     return render(request, 'index.html', context)
@@ -56,7 +83,6 @@ def index(request):
 
 @login_required(login_url='login')
 def perfil_usuario(request):
-
     if request.method == 'POST':
 
         form = EditaUsuarioForm(request.POST, instance=request.user)
@@ -64,7 +90,6 @@ def perfil_usuario(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Informações atualizadas com sucesso!')
-            print('SUCESSO!')
             return redirect(to='perfil_usuario')
         else:
             messages.error(request, 'Erro ao atualizar informações')
@@ -80,22 +105,19 @@ def perfil_usuario(request):
 
 @login_required(login_url='login')
 def lista_horarios(request):
-
     user = request.user
-    horarios = Agendamentos.objects.filter(cliente=user).order_by('data', 'horario')
+    horarios = Agendamento.objects.filter(cliente=user).order_by('data', 'horario')
 
     context = {
         'horarios': horarios,
     }
 
-    return render(request, 'lista_horarios.html', context)\
-
+    return render(request, 'lista_horarios.html', context)
 
 
 @login_required(login_url='login')
 def editar_horario(request, pk):
-
-    horario = Agendamentos.objects.get(id=pk)
+    horario = Agendamento.objects.get(id=pk)
     form = AgendamentoForm(instance=horario)
     if str(request.method) == 'POST':
         form = AgendamentoForm(request.POST, instance=horario)
@@ -111,8 +133,7 @@ def editar_horario(request, pk):
 
 @login_required(login_url='login')
 def deletar_horario(request, pk):
-
-    horario = Agendamentos.objects.get(id=pk)
+    horario = Agendamento.objects.get(id=pk)
 
     if str(request.method) == 'POST':
         horario.delete()
@@ -126,7 +147,6 @@ def deletar_horario(request, pk):
 
 @login_required(login_url='login')
 def trocar_senha(request):
-
     if request.method == 'POST':
         form = PasswordChangeForm(data=request.POST, user=request.user)
 
@@ -149,7 +169,6 @@ def trocar_senha(request):
 
 
 def registerPage(request):
-
     form = CreateUserForm()
 
     if request.method == 'POST':
@@ -167,7 +186,6 @@ def registerPage(request):
 
 
 def loginPage(request):
-
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['pass']
@@ -182,7 +200,6 @@ def loginPage(request):
 
 @login_required(login_url='login')
 def logoutUser(request):
-
     logout(request)
 
     return redirect('index')
