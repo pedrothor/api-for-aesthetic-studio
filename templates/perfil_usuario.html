@@ -1,0 +1,26 @@
+{% include 'base.html' %}
+{% load bootstrap5 %}
+
+
+<div class="col">
+    <form action="" method="POST" style="margin-top: 10%; display: flex; justift-content: center; align-items: center; flex-direction: column;">
+        {% csrf_token %}
+      {% bootstrap_messages %}
+      <h4 class="d-flex justify-content-center">Meu Perfil</h4>
+        <br>
+            <h5>Usuário</h5>
+        <div style="max-width: 70%;">
+            {{ form.username }}
+        </div>
+            <br>
+            <h5>Email</h5>
+        <div style="max-width: 70%;">
+            {{ form.email }}
+        </div>
+        <br>
+        <div class="d-flex justify-content-center" style="padding: 15px;">
+            <button type="submit" class="btn btn-success">Editar</button>
+            <a href="{% url 'index' %}"><button type="button" class="btn btn-warning" style="margin-left: 10px;">Cancelar</button></a>
+        </div>
+    </form>
+</div>
