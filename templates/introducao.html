@@ -1,13 +1,91 @@
 {% load bootstrap5 %}
-<body>
+{% load static %}
 
-    {% bootstrap_messages %}
+<body style="width: 100vw;">
 
-    <div style="border: 3px solid #FFC0CB; margin-left: 2%; margin-right: 2%; margin-top: 2%;">
-        <div class="d-flex align-items-center" style="flex-direction: column;">
-            <h1 class="titulo-header" style="font-size: 80px; color: #FFF8DC;">Carolina Inácio Studio</h1>
-            <h5 class="titulo-header2" style="font-size: 40px; color: #D0B084;">Podologia, Manicure, Pedicure e Depilação</h5>
-            <br>
-            <br>
-            <a href="#marcar_horario"><button class="btn btn-success btn" type="button" style="font-size: 20px;">Fazer Agendamento</button></a>
-        </div>
+    <!-- Start Intro -->
+    <section id="introducao">
+        <div class="rev_slider_wrapper fullscreen-container" data-alias="agency-website" id="rev_slider_280_1_wrapper">
+            <img class="imagem-introducao" src="{% static 'images/podologia.png' %}" alt="" style="height: 90vh; width: 100vw;">
+          <!-- START REVOLUTION SLIDER 5.1.4 fullscreen mode -->
+          <div class="rev_slider fullscreenbanner" id="rev_slider_nagency" style="display:none;">
+              <ul style="display:none;">
+                <!-- slider Item 1 -->
+                <li data-index="rs-1" data-transition="fadetotopfadefrombottom" data-slotamount="default" data-easein="Power3.easeInOut" data-easeout="Power3.easeInOut" data-masterspeed="1500" data-rotate="0"  data-saveperformance="off"  data-title="N.Agency" data-description="">
+                  <!-- LAYER NR. 1 -->
+                  <div class="tp-caption NotGeneric-Title white-color rs-parallaxlevel-3"
+                    id="slide-1-layer-1"
+                    data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']"
+                    data-y="['middle','middle','middle','middle']" data-voffset="['-160','-170','-170','-120']"
+                    data-fontsize="['70','60','60','36']"
+                    data-lineheight="['70','60','60','50']"
+                    data-width="none"
+                    data-height="none"
+                    data-whitespace="nowrap"
+                    data-transform_idle="o:1;"
+                    data-transform_in="y:[100%];z:0;rZ:-35deg;sX:1;sY:1;skX:0;skY:0;s:2000;e:Power4.easeInOut;"
+                    data-transform_out="y:[100%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;"
+                    data-mask_in="x:0px;y:0px;s:inherit;e:inherit;"
+                    data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;"
+                    data-start="1000"
+                    data-splitin="chars"
+                    data-splitout="none"
+                    data-responsive_offset="on"
+                    data-elementdelay="0.05"
+                    style="z-index: 5; white-space: nowrap;">Carolina Inácio
+                  </div>
+
+                  <!-- LAYER NR. 2 -->
+                  <div class="tp-caption NotGeneric-SubTitle tp-resizeme white-color rs-parallaxlevel-4"
+                    id="slide-1-layer-2"
+                    data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']"
+                    data-y="['middle','middle','middle','middle']" data-voffset="['-80','-90','-90','-60']"
+                    data-fontsize="['28','24','24','20']"
+                    data-lineheight="['28','24','36','30']"
+                    data-width="none"
+                    data-height="none"
+                    data-whitespace="nowrap"
+                    data-transform_idle="o:1;"
+                    data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;"
+                    data-transform_out="y:[100%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;"
+                    data-mask_in="x:0px;y:[100%];s:inherit;e:inherit;"
+                    data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;"
+                    data-start="1500"
+                    data-splitin="none"
+                    data-splitout="none"
+                    data-responsive_offset="on"
+                    style="z-index: 6; white-space: nowrap;">Studio
+                  </div>
+
+                  <!-- LAYER NR. 3 -->
+                  <div class="tp-caption rs-parallaxlevel-5"
+                    id="slide-1-layer-3"
+                    data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']"
+                    data-y="['middle','middle','middle','middle']" data-voffset="['15','5','5','10']"
+                    data-width="none"
+                    data-height="none"
+                    data-whitespace="nowrap"
+                    data-transform_idle="o:1;"
+                    data-transform_hover="o:1;rX:0;rY:0;rZ:0;z:0;s:300;e:Power1.easeInOut;"
+                    data-style_hover="c:rgba(255, 255, 255, 1.00);bc:rgba(255, 255, 255, 1.00);cursor:pointer;"
+                    data-transform_in="y:50px;opacity:0;s:1500;e:Power4.easeInOut;"
+                    data-transform_out="y:[175%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;"
+                    data-mask_out="x:inherit;y:inherit;"
+                    data-start="2000"
+                    data-splitin="none"
+                    data-splitout="none"
+                    data-actions='[{"event":"click","action":"jumptoslide","slide":"next","delay":""}]'
+                    data-responsive_offset="on"
+                    data-responsive="off"
+                    style=""><a data-scroll href='#agendamento' class='send_message btn btn-main btn-theme wow fadeInUp'>Agendar Horário</a>
+                  </div>
+
+                </li>
+
+
+              </ul>
+              <div class="tp-bannertimer tp-bottom" style="visibility: hidden !important;"></div>
+          </div>
+      </div>
+    </section>
+    <!-- End Intro -->
